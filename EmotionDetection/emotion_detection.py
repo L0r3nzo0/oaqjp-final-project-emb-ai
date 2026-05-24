@@ -15,15 +15,21 @@ def emotion_detector(text_to_analyze):
         }
     }
 
-    resp = requests.post(
-        url,
-        json=input_json,
-        headers=headers
-    )
+    resp = requests.post(url,json=input_json,headers=headers)
+    #handling error 400 
+    if resp.status_code == 400:
+        return {
+            "anger": None,
+            "disgust": None,
+            "fear": None,
+            "joy": None,
+            "sadness": None,
+            "dominant_emotion": None
+        }
 
-    custom_form_response = json.loads(resp.text)
+    custom_resp = json.loads(resp.text)
 
-    emotions = custom_form_response["emotionPredictions"][0]["emotion"]
+    emotions = custom_resp["emotionPredictions"][0]["emotion"]
 
     anger = emotions["anger"]
     disgust = emotions["disgust"]
